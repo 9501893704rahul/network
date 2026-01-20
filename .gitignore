@@ -25,3 +25,4 @@ dist-ssr
 
 # Browser screenshots (development)
 .browser_screenshots/
+extension.tar.gz

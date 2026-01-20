@@ -4,6 +4,7 @@ import Blogs from './pages/Blogs'
 import BlogPost from './pages/BlogPost'
 import AIContextFlow from './pages/AIContextFlow'
 import SmartProfiles from './pages/SmartProfiles'
+import ExtensionDemo from './pages/ExtensionDemo'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/blogs/:id" element={<BlogPost />} />
         <Route path="/ai-context-flow" element={<AIContextFlow />} />
         <Route path="/smart-profiles" element={<SmartProfiles />} />
+        <Route path="/extension" element={<ExtensionDemo />} />
       </Routes>
     </Router>
   )
