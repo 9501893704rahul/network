@@ -51,20 +51,47 @@ const Hero = () => {
           Secure infrastructure for user-owned apps & AI context that travels anywhere.
         </p>
 
-        {/* CTA Button */}
-        <div className="flex justify-center mb-16">
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
+          <a 
+            href="https://github.com/9501893704rahul/network/archive/refs/heads/main.zip"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] rounded-full text-white font-semibold text-lg shadow-lg shadow-[#8B5CF6]/30 hover:shadow-xl hover:shadow-[#8B5CF6]/40 transition-all hover:scale-105"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>DOWNLOAD EXTENSION</span>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#F59E0B] opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10" />
+          </a>
           <a 
             href="https://app.plurality.network/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] rounded-full text-white font-semibold text-lg shadow-lg shadow-[#8B5CF6]/30 hover:shadow-xl hover:shadow-[#8B5CF6]/40 transition-all hover:scale-105"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#1A1333] border border-[#8B5CF6]/30 rounded-full text-white font-semibold text-lg hover:border-[#8B5CF6] hover:bg-[#8B5CF6]/10 transition-all hover:scale-105"
           >
-            <span>USE YOUR AI MEMORY NOW</span>
+            <span>USE MEMORY STUDIO</span>
             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#F59E0B] opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10" />
           </a>
+        </div>
+
+        {/* Extension Info Banner */}
+        <div className="max-w-2xl mx-auto mb-16 p-4 bg-gradient-to-r from-[#8B5CF6]/10 to-[#F59E0B]/10 rounded-2xl border border-[#8B5CF6]/20">
+          <div className="flex items-center justify-center gap-4 text-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B5CF6] to-[#06B6D4] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" strokeWidth="2"/>
+                <circle cx="12" cy="12" r="4" fill="currentColor"/>
+              </svg>
+            </div>
+            <div className="text-left">
+              <p className="text-sm text-[#E2E8F0]">
+                <span className="font-semibold text-[#8B5CF6]">AI Context Flow Extension</span> - Works with ChatGPT, Claude, Gemini, Grok, Perplexity & DeepSeek
+              </p>
+              <p className="text-xs text-[#94A3B8]">Download → Extract → Load in Chrome (Developer Mode) → Start using!</p>
+            </div>
+          </div>
         </div>
 
         {/* Integration Visual */}
