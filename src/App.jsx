@@ -1,28 +1,21 @@
-import Header from './components/Header'
-import Hero from './components/Hero'
-import Features from './components/Features'
-import Partners from './components/Partners'
-import Products from './components/Products'
-import FAQ from './components/FAQ'
-import Blog from './components/Blog'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Blogs from './pages/Blogs'
+import BlogPost from './pages/BlogPost'
+import AIContextFlow from './pages/AIContextFlow'
+import SmartProfiles from './pages/SmartProfiles'
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#0F0A1F]">
-      <Header />
-      <main>
-        <Hero />
-        <Features />
-        <Partners />
-        <Products />
-        <FAQ />
-        <Blog />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/:id" element={<BlogPost />} />
+        <Route path="/ai-context-flow" element={<AIContextFlow />} />
+        <Route path="/smart-profiles" element={<SmartProfiles />} />
+      </Routes>
+    </Router>
   )
 }
 

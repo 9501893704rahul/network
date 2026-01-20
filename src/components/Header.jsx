@@ -1,28 +1,32 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0F0A1F]/80 backdrop-blur-xl border-b border-[#8B5CF6]/10">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B5CF6] to-[#F59E0B] flex items-center justify-center transform group-hover:scale-105 transition-transform">
               <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>
             </div>
             <span className="text-xl font-bold font-['Space_Grotesk'] text-white">Plurality</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="/" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6] transition-colors">
+            <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-[#8B5CF6]' : 'text-[#E2E8F0] hover:text-[#8B5CF6]'}`}>
               HOME
-            </a>
+            </Link>
             <div className="relative group">
               <button 
                 className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6] transition-colors flex items-center gap-1"
@@ -40,22 +44,22 @@ const Header = () => {
                   onMouseEnter={() => setIsProductsOpen(true)}
                   onMouseLeave={() => setIsProductsOpen(false)}
                 >
-                  <a href="#ai-context-flow" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
+                  <Link to="/ai-context-flow" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
                     AI Context Flow
-                  </a>
-                  <a href="#smart-profiles" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
+                  </Link>
+                  <Link to="/smart-profiles" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
                     Smart Profiles
-                  </a>
-                  <a href="https://app.plurality.network/" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
-                    Memory Studio
+                  </Link>
+                  <a href="https://app.plurality.network/" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
+                    Memory Studio ↗
                   </a>
                 </div>
               )}
             </div>
-            <a href="#blogs" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6] transition-colors">
+            <Link to="/blogs" className={`text-sm font-medium transition-colors ${isActive('/blogs') || location.pathname.startsWith('/blogs/') ? 'text-[#8B5CF6]' : 'text-[#E2E8F0] hover:text-[#8B5CF6]'}`}>
               BLOGS
-            </a>
-            <a href="#support" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6] transition-colors">
+            </Link>
+            <a href="/#support" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6] transition-colors">
               SUPPORT
             </a>
           </nav>
@@ -99,16 +103,16 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-[#8B5CF6]/10 pt-4">
             <nav className="flex flex-col gap-4">
-              <a href="/" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]">HOME</a>
-              <a href="#ai-context-flow" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]">AI Context Flow</a>
-              <a href="#smart-profiles" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]">Smart Profiles</a>
-              <a href="#blogs" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]">BLOGS</a>
-              <a href="#support" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]">SUPPORT</a>
+              <Link to="/" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>HOME</Link>
+              <Link to="/ai-context-flow" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>AI Context Flow</Link>
+              <Link to="/smart-profiles" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>Smart Profiles</Link>
+              <Link to="/blogs" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>BLOGS</Link>
+              <a href="/#support" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>SUPPORT</a>
               <div className="flex gap-4 mt-4">
-                <a href="https://discord.com/invite/Mb6ZDgGjcP" className="px-4 py-2 text-sm font-medium text-[#E2E8F0] border border-[#8B5CF6]/30 rounded-full">
+                <a href="https://discord.com/invite/Mb6ZDgGjcP" target="_blank" rel="noopener noreferrer" className="px-4 py-2 text-sm font-medium text-[#E2E8F0] border border-[#8B5CF6]/30 rounded-full">
                   JOIN DISCORD
                 </a>
-                <a href="https://docs.plurality.network/" className="px-4 py-2 text-sm font-medium text-[#0F0A1F] bg-gradient-to-r from-[#8B5CF6] to-[#F59E0B] rounded-full">
+                <a href="https://docs.plurality.network/" target="_blank" rel="noopener noreferrer" className="px-4 py-2 text-sm font-medium text-[#0F0A1F] bg-gradient-to-r from-[#8B5CF6] to-[#F59E0B] rounded-full">
                   DOCS
                 </a>
               </div>
