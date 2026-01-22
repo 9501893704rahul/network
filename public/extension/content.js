@@ -365,11 +365,52 @@
 
   // Toggle context panel visibility
   function toggleContextPanel() {
+    if (!contextPanel) {
+      console.error('Context panel not created');
+      return;
+    }
+    
     contextPanel.classList.toggle('active');
-    floatingButton.classList.toggle('active');
+    
+    // Toggle active state on whichever button is visible
+    if (floatingButton) {
+      floatingButton.classList.toggle('active');
+    }
+    if (inlineButton) {
+      inlineButton.classList.toggle('active');
+    }
     
     if (contextPanel.classList.contains('active')) {
       loadContextList();
+      // Position panel near the inline button if it exists
+      positionPanel();
+    }
+  }
+
+  // Position the panel near the inline button
+  function positionPanel() {
+    if (!contextPanel) return;
+    
+    if (inlineButton && document.contains(inlineButton)) {
+      const rect = inlineButton.getBoundingClientRect();
+      const panelWidth = 320;
+      const panelHeight = 400;
+      
+      // Position above the button, aligned to the right
+      let left = rect.right - panelWidth;
+      let bottom = window.innerHeight - rect.top + 10;
+      
+      // Make sure it doesn't go off screen
+      if (left < 10) left = 10;
+      if (bottom + panelHeight > window.innerHeight - 10) {
+        bottom = window.innerHeight - panelHeight - 10;
+      }
+      
+      contextPanel.style.position = 'fixed';
+      contextPanel.style.bottom = bottom + 'px';
+      contextPanel.style.right = (window.innerWidth - rect.right) + 'px';
+      contextPanel.style.left = 'auto';
+      contextPanel.style.top = 'auto';
     }
   }
 
