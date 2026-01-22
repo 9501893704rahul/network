@@ -32,26 +32,58 @@ export const checkExtensionInstalled = async (extensionId) => {
   
   const id = extensionId || getExtensionId();
   
+  // Check if chrome.runtime is available
+  if (typeof chrome === 'undefined') {
+    return { installed: false, error: 'Chrome API not available. Please use Chrome browser.' };
+  }
+  
+  if (!chrome.runtime || !chrome.runtime.sendMessage) {
+    return { installed: false, error: 'Chrome runtime API not available. Make sure you are using Chrome.' };
+  }
+  
+  console.log('Attempting to connect to extension:', id);
+  
   try {
     return new Promise((resolve) => {
       // Set a timeout in case extension doesn't respond
       const timeout = setTimeout(() => {
-        resolve({ installed: false, error: 'Extension not responding' });
-      }, 2000);
+        console.log('Extension connection timed out');
+        resolve({ installed: false, error: 'Extension not responding. Make sure the extension is installed and enabled, then reload this page.' });
+      }, 3000);
       
-      chrome.runtime.sendMessage(id, { type: 'PING' }, (response) => {
+      try {
+        chrome.runtime.sendMessage(id, { type: 'PING' }, (response) => {
+          clearTimeout(timeout);
+          console.log('Extension response:', response, 'Error:', chrome.runtime.lastError);
+          
+          if (chrome.runtime.lastError) {
+            const errorMsg = chrome.runtime.lastError.message;
+            console.error('Chrome runtime error:', errorMsg);
+            
+            // Provide more helpful error messages
+            if (errorMsg.includes('Could not establish connection')) {
+              resolve({ installed: false, error: 'Could not connect to extension. Please make sure:\n1. The extension is installed\n2. The extension ID is correct\n3. Reload the extension in chrome://extensions' });
+            } else if (errorMsg.includes('Invalid extension id')) {
+              resolve({ installed: false, error: 'Invalid extension ID format. Please check the ID.' });
+            } else {
+              resolve({ installed: false, error: errorMsg });
+            }
+          } else if (response && response.success) {
+            console.log('Successfully connected to extension v' + response.version);
+            setExtensionId(id);
+            resolve({ installed: true, version: response.version });
+          } else {
+            resolve({ installed: false, error: 'Extension responded but with invalid data' });
+          }
+        });
+      } catch (sendError) {
         clearTimeout(timeout);
-        if (chrome.runtime.lastError) {
-          resolve({ installed: false, error: chrome.runtime.lastError.message });
-        } else if (response && response.success) {
-          setExtensionId(id);
-          resolve({ installed: true, version: response.version });
-        } else {
-          resolve({ installed: false, error: 'Invalid response' });
-        }
-      });
+        console.error('Error sending message:', sendError);
+        resolve({ installed: false, error: 'Failed to send message: ' + sendError.message });
+      }
     });
   } catch (error) {
+    console.error('Connection error:', error);
     return { installed: false, error: error.message };
   }
 };

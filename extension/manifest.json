@@ -24,10 +24,14 @@
   ],
   "externally_connectable": {
     "matches": [
+      "http://localhost/*",
       "http://localhost:*/*",
       "https://*.prod-runtime.all-hands.dev/*",
+      "https://work-1-progheyqtkqsgjtd.prod-runtime.all-hands.dev/*",
+      "https://work-2-progheyqtkqsgjtd.prod-runtime.all-hands.dev/*",
       "https://*.vercel.app/*",
-      "https://*.netlify.app/*"
+      "https://*.netlify.app/*",
+      "https://*.github.io/*"
     ]
   },
   "action": {
