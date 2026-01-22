@@ -19,6 +19,53 @@
   --acf-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Inline Button (near voice/send buttons) */
+#acf-inline-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  border-radius: 50% !important;
+  color: var(--acf-primary) !important;
+  transition: all 0.2s ease !important;
+  padding: 0 !important;
+  margin: 0 4px !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+
+#acf-inline-button:hover {
+  background: rgba(139, 92, 246, 0.15) !important;
+  transform: scale(1.1) !important;
+}
+
+#acf-inline-button:active {
+  transform: scale(0.95) !important;
+}
+
+#acf-inline-button svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+#acf-inline-button.has-context::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: var(--acf-success);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
 /* Floating Action Button */
 #acf-floating-button {
   position: fixed;

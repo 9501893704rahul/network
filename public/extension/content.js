@@ -10,44 +10,58 @@
       name: 'ChatGPT',
       hostnames: ['chat.openai.com', 'chatgpt.com'],
       inputSelector: '#prompt-textarea, textarea[data-id="root"]',
-      submitSelector: 'button[data-testid="send-button"], button[data-testid="fruitjuice-send-button"]'
+      submitSelector: 'button[data-testid="send-button"], button[data-testid="fruitjuice-send-button"]',
+      inputContainerSelector: 'div[class*="composer"], form[class*="stretch"]',
+      buttonAreaSelector: 'div[class*="flex"][class*="items-center"]:has(button[aria-label*="voice"], button[aria-label*="Voice"], button svg)'
     },
     CLAUDE: {
       name: 'Claude',
       hostnames: ['claude.ai'],
       inputSelector: 'div[contenteditable="true"], textarea',
-      submitSelector: 'button[aria-label="Send Message"]'
+      submitSelector: 'button[aria-label="Send Message"]',
+      inputContainerSelector: 'div[class*="input"], fieldset',
+      buttonAreaSelector: 'div[class*="flex"]:has(button)'
     },
     GEMINI: {
       name: 'Gemini',
       hostnames: ['gemini.google.com'],
       inputSelector: 'rich-textarea, textarea',
-      submitSelector: 'button[aria-label="Send message"]'
+      submitSelector: 'button[aria-label="Send message"]',
+      inputContainerSelector: 'div[class*="input-area"]',
+      buttonAreaSelector: 'div[class*="buttons"]'
     },
     GROK: {
       name: 'Grok',
       hostnames: ['grok.x.ai'],
       inputSelector: 'textarea',
-      submitSelector: 'button[type="submit"]'
+      submitSelector: 'button[type="submit"]',
+      inputContainerSelector: 'form',
+      buttonAreaSelector: 'div:has(button)'
     },
     PERPLEXITY: {
       name: 'Perplexity',
       hostnames: ['www.perplexity.ai'],
       inputSelector: 'textarea',
-      submitSelector: 'button[aria-label="Submit"]'
+      submitSelector: 'button[aria-label="Submit"]',
+      inputContainerSelector: 'div[class*="input"]',
+      buttonAreaSelector: 'div:has(button)'
     },
     DEEPSEEK: {
       name: 'DeepSeek',
       hostnames: ['chat.deepseek.com'],
       inputSelector: 'textarea',
-      submitSelector: 'button[type="submit"]'
+      submitSelector: 'button[type="submit"]',
+      inputContainerSelector: 'div[class*="input"]',
+      buttonAreaSelector: 'div:has(button)'
     }
   };
 
   let currentPlatform = null;
+  let inlineButton = null;
   let floatingButton = null;
   let contextPanel = null;
   let activeContext = null;
+  let observer = null;
 
   // Initialize
   function init() {
@@ -56,11 +70,16 @@
 
     console.log(`AI Context Flow: Detected ${currentPlatform.name}`);
     
-    createFloatingButton();
+    // Try to inject inline button, fallback to floating
+    injectInlineButton();
+    createFloatingButton(); // Keep as fallback
     createContextPanel();
     loadActiveContext();
     setupMessageListener();
     setupKeyboardShortcuts();
+    
+    // Watch for DOM changes to re-inject button if needed
+    setupMutationObserver();
   }
 
   // Detect current platform
@@ -68,13 +87,192 @@
     const hostname = window.location.hostname;
     for (const [key, platform] of Object.entries(PLATFORMS)) {
       if (platform.hostnames.some(h => hostname.includes(h))) {
-        return platform;
+        return { ...platform, key };
       }
     }
     return null;
   }
 
-  // Create floating action button
+  // Setup mutation observer to handle dynamic content
+  function setupMutationObserver() {
+    observer = new MutationObserver((mutations) => {
+      // Check if our inline button was removed
+      if (inlineButton && !document.contains(inlineButton)) {
+        inlineButton = null;
+        injectInlineButton();
+      }
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  // Inject button inline near the input area
+  function injectInlineButton() {
+    if (inlineButton && document.contains(inlineButton)) return;
+    
+    // Wait a bit for the page to fully load
+    setTimeout(() => {
+      const injected = tryInjectButton();
+      if (!injected) {
+        // Retry a few times
+        let retries = 0;
+        const retryInterval = setInterval(() => {
+          if (tryInjectButton() || retries > 10) {
+            clearInterval(retryInterval);
+          }
+          retries++;
+        }, 1000);
+      }
+    }, 500);
+  }
+
+  // Try to inject the button into the input area
+  function tryInjectButton() {
+    if (!currentPlatform) return false;
+    
+    // For ChatGPT, find the button area near voice/send buttons
+    if (currentPlatform.key === 'CHATGPT') {
+      return injectChatGPTButton();
+    }
+    
+    // For Claude
+    if (currentPlatform.key === 'CLAUDE') {
+      return injectClaudeButton();
+    }
+    
+    // Generic injection for other platforms
+    return injectGenericButton();
+  }
+
+  // Inject button for ChatGPT
+  function injectChatGPTButton() {
+    // Find the input container
+    const inputArea = document.querySelector('#prompt-textarea, textarea[data-id="root"]');
+    if (!inputArea) return false;
+    
+    // Find the parent form or container
+    const form = inputArea.closest('form') || inputArea.closest('div[class*="composer"]');
+    if (!form) return false;
+    
+    // Find the buttons area (where voice and send buttons are)
+    const buttonsArea = form.querySelector('div[class*="flex"][class*="gap"]') || 
+                        form.querySelector('div[class*="items-center"]:last-child');
+    
+    if (!buttonsArea) {
+      // Try to find any button container
+      const allButtons = form.querySelectorAll('button');
+      if (allButtons.length > 0) {
+        const lastButton = allButtons[allButtons.length - 1];
+        const buttonParent = lastButton.parentElement;
+        if (buttonParent) {
+          createInlineButton(buttonParent, 'prepend');
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    createInlineButton(buttonsArea, 'prepend');
+    return true;
+  }
+
+  // Inject button for Claude
+  function injectClaudeButton() {
+    const inputArea = document.querySelector('div[contenteditable="true"], fieldset');
+    if (!inputArea) return false;
+    
+    const container = inputArea.closest('div[class*="flex"]') || inputArea.parentElement;
+    if (!container) return false;
+    
+    const buttonsArea = container.querySelector('div:has(button)') || container;
+    createInlineButton(buttonsArea, 'prepend');
+    return true;
+  }
+
+  // Generic button injection
+  function injectGenericButton() {
+    const inputArea = document.querySelector(currentPlatform.inputSelector);
+    if (!inputArea) return false;
+    
+    const form = inputArea.closest('form') || inputArea.parentElement?.parentElement;
+    if (!form) return false;
+    
+    const buttonsArea = form.querySelector('div:has(button)');
+    if (buttonsArea) {
+      createInlineButton(buttonsArea, 'prepend');
+      return true;
+    }
+    
+    return false;
+  }
+
+  // Create the inline button element
+  function createInlineButton(container, position = 'prepend') {
+    if (inlineButton && document.contains(inlineButton)) return;
+    
+    inlineButton = document.createElement('button');
+    inlineButton.id = 'acf-inline-button';
+    inlineButton.type = 'button';
+    inlineButton.title = 'AI Context Flow - Click to inject context';
+    inlineButton.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="12" r="4" fill="currentColor"/>
+      </svg>
+    `;
+    
+    // Style the button to match the platform
+    inlineButton.style.cssText = `
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 50%;
+      color: #8B5CF6;
+      transition: all 0.2s ease;
+      padding: 0;
+      margin: 0 4px;
+      flex-shrink: 0;
+    `;
+    
+    inlineButton.addEventListener('mouseenter', () => {
+      inlineButton.style.background = 'rgba(139, 92, 246, 0.1)';
+      inlineButton.style.transform = 'scale(1.1)';
+    });
+    
+    inlineButton.addEventListener('mouseleave', () => {
+      inlineButton.style.background = 'transparent';
+      inlineButton.style.transform = 'scale(1)';
+    });
+    
+    inlineButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleContextPanel();
+    });
+    
+    if (position === 'prepend') {
+      container.insertBefore(inlineButton, container.firstChild);
+    } else {
+      container.appendChild(inlineButton);
+    }
+    
+    // Hide floating button when inline is visible
+    if (floatingButton) {
+      floatingButton.style.display = 'none';
+    }
+    
+    console.log('AI Context Flow: Inline button injected');
+  }
+
+  // Create floating action button (fallback)
   function createFloatingButton() {
     floatingButton = document.createElement('div');
     floatingButton.id = 'acf-floating-button';
@@ -90,6 +288,11 @@
     
     floatingButton.addEventListener('click', toggleContextPanel);
     document.body.appendChild(floatingButton);
+    
+    // Initially hide if inline button exists
+    if (inlineButton && document.contains(inlineButton)) {
+      floatingButton.style.display = 'none';
+    }
   }
 
   // Create context panel
@@ -230,12 +433,25 @@
   // Update active context display
   function updateActiveContextDisplay() {
     const nameEl = document.getElementById('acf-context-name');
-    if (activeContext) {
-      nameEl.textContent = activeContext.name;
-      nameEl.classList.add('has-context');
-    } else {
-      nameEl.textContent = 'No context selected';
-      nameEl.classList.remove('has-context');
+    if (nameEl) {
+      if (activeContext) {
+        nameEl.textContent = activeContext.name;
+        nameEl.classList.add('has-context');
+      } else {
+        nameEl.textContent = 'No context selected';
+        nameEl.classList.remove('has-context');
+      }
+    }
+    
+    // Update inline button indicator
+    if (inlineButton) {
+      if (activeContext) {
+        inlineButton.classList.add('has-context');
+        inlineButton.title = `AI Context Flow - Active: ${activeContext.name}`;
+      } else {
+        inlineButton.classList.remove('has-context');
+        inlineButton.title = 'AI Context Flow - Click to inject context';
+      }
     }
   }
 
