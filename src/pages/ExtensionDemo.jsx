@@ -163,8 +163,8 @@ Please provide a detailed and comprehensive response. Be thorough in your explan
 
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <a 
-                href="/extension/ai-context-flow.zip"
-                download
+                href="/ai-context-flow.zip"
+                download="ai-context-flow.zip"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] rounded-full text-white font-semibold hover:shadow-lg hover:shadow-[#8B5CF6]/30 transition-all"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -185,6 +185,44 @@ Please provide a detailed and comprehensive response. Be thorough in your explan
                 </svg>
                 View Source
               </a>
+            </div>
+
+            {/* Installation Instructions */}
+            <div className="bg-[#1A1333] border border-[#8B5CF6]/30 rounded-2xl p-6 mb-12">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                Installation Guide
+              </h3>
+              <ol className="space-y-3 text-[#94A3B8]">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">1</span>
+                  <span>Click <strong className="text-white">"Download Extension"</strong> to get the ZIP file</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">2</span>
+                  <span>Extract the ZIP file to a folder on your computer</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">3</span>
+                  <span>Open Chrome and go to <code className="bg-[#0F0A1F] px-2 py-1 rounded text-[#A78BFA]">chrome://extensions</code></span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">4</span>
+                  <span>Enable <strong className="text-white">"Developer mode"</strong> (toggle in top right)</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">5</span>
+                  <span>Click <strong className="text-white">"Load unpacked"</strong> and select the extracted folder</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#8B5CF6] text-white text-sm flex items-center justify-center font-semibold">6</span>
+                  <span>The extension icon will appear in your toolbar - you're ready to go! 🎉</span>
+                </li>
+              </ol>
             </div>
           </div>
 
