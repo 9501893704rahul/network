@@ -53,6 +53,9 @@ const Header = () => {
                   <Link to="/extension" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
                     Chrome Extension
                   </Link>
+                  <Link to="/context-manager" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
+                    Context Manager
+                  </Link>
                   <a href="https://app.plurality.network/" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-[#E2E8F0] hover:bg-[#8B5CF6]/10 hover:text-[#8B5CF6]">
                     Memory Studio ↗
                   </a>
@@ -110,6 +113,7 @@ const Header = () => {
               <Link to="/ai-context-flow" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>AI Context Flow</Link>
               <Link to="/smart-profiles" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>Smart Profiles</Link>
               <Link to="/extension" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>Chrome Extension</Link>
+              <Link to="/context-manager" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>Context Manager</Link>
               <Link to="/blogs" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>BLOGS</Link>
               <a href="/#support" className="text-sm font-medium text-[#E2E8F0] hover:text-[#8B5CF6]" onClick={() => setIsMenuOpen(false)}>SUPPORT</a>
               <div className="flex gap-4 mt-4">

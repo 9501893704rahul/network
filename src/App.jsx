@@ -5,6 +5,7 @@ import BlogPost from './pages/BlogPost'
 import AIContextFlow from './pages/AIContextFlow'
 import SmartProfiles from './pages/SmartProfiles'
 import ExtensionDemo from './pages/ExtensionDemo'
+import ContextManager from './pages/ContextManager'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/ai-context-flow" element={<AIContextFlow />} />
         <Route path="/smart-profiles" element={<SmartProfiles />} />
         <Route path="/extension" element={<ExtensionDemo />} />
+        <Route path="/context-manager" element={<ContextManager />} />
       </Routes>
     </Router>
   )

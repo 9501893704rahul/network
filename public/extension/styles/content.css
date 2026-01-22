@@ -1,0 +1,381 @@
+/* AI Context Flow - Content Script Styles */
+
+/* CSS Variables */
+:root {
+  --acf-primary: #8B5CF6;
+  --acf-primary-dark: #7C3AED;
+  --acf-secondary: #06B6D4;
+  --acf-bg-dark: #0F0F1A;
+  --acf-bg-card: #1A1A2E;
+  --acf-bg-hover: #252540;
+  --acf-text-primary: #FFFFFF;
+  --acf-text-secondary: #A0A0B0;
+  --acf-text-muted: #6B6B80;
+  --acf-border: #2D2D45;
+  --acf-success: #10B981;
+  --acf-warning: #F59E0B;
+  --acf-error: #EF4444;
+  --acf-gradient: linear-gradient(135deg, var(--acf-primary) 0%, var(--acf-secondary) 100%);
+  --acf-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Floating Action Button */
+#acf-floating-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acf-fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--acf-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--acf-shadow);
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.acf-fab-main:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 48px rgba(139, 92, 246, 0.4);
+}
+
+#acf-floating-button.active .acf-fab-main {
+  transform: rotate(45deg);
+}
+
+.acf-fab-tooltip {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--acf-bg-card);
+  color: var(--acf-text-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  box-shadow: var(--acf-shadow);
+}
+
+#acf-floating-button:hover .acf-fab-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Context Panel */
+#acf-context-panel {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 320px;
+  max-height: 480px;
+  background: var(--acf-bg-dark);
+  border: 1px solid var(--acf-border);
+  border-radius: 16px;
+  box-shadow: var(--acf-shadow);
+  z-index: 999998;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s ease;
+}
+
+#acf-context-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Panel Header */
+.acf-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--acf-bg-card);
+  border-bottom: 1px solid var(--acf-border);
+}
+
+.acf-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--acf-text-primary);
+}
+
+.acf-panel-title svg {
+  color: var(--acf-primary);
+}
+
+.acf-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--acf-text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acf-panel-close:hover {
+  background: var(--acf-bg-hover);
+  color: var(--acf-text-primary);
+}
+
+/* Panel Body */
+.acf-panel-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+/* Active Context */
+.acf-active-context {
+  padding: 14px;
+  background: var(--acf-bg-card);
+  border: 1px solid var(--acf-border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.acf-context-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--acf-text-muted);
+  margin-bottom: 6px;
+}
+
+.acf-context-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--acf-text-secondary);
+}
+
+.acf-context-name.has-context {
+  color: var(--acf-primary);
+}
+
+/* Quick Actions */
+.acf-quick-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.acf-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--acf-gradient);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.acf-action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.acf-action-btn:active {
+  transform: translateY(0);
+}
+
+/* Context List */
+.acf-context-list {
+  margin-bottom: 16px;
+}
+
+.acf-contexts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.acf-context-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--acf-bg-card);
+  border: 1px solid var(--acf-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.acf-context-item:hover {
+  border-color: var(--acf-primary);
+  transform: translateX(4px);
+}
+
+.acf-context-item.active {
+  border-color: var(--acf-primary);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.acf-context-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--acf-gradient);
+  border-radius: 8px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.acf-context-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.acf-context-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--acf-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.acf-context-item-type {
+  font-size: 11px;
+  color: var(--acf-text-muted);
+  text-transform: capitalize;
+}
+
+.acf-empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--acf-text-muted);
+  font-size: 13px;
+}
+
+/* Panel Footer */
+.acf-panel-footer {
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--acf-border);
+}
+
+.acf-panel-footer a {
+  color: var(--acf-primary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.acf-panel-footer a:hover {
+  color: var(--acf-secondary);
+}
+
+/* Notification */
+.acf-notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 12px 24px;
+  background: var(--acf-bg-card);
+  border: 1px solid var(--acf-border);
+  border-radius: 10px;
+  color: var(--acf-text-primary);
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-shadow: var(--acf-shadow);
+  z-index: 9999999;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.acf-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.acf-notification-success {
+  border-color: var(--acf-success);
+}
+
+.acf-notification-warning {
+  border-color: var(--acf-warning);
+}
+
+.acf-notification-error {
+  border-color: var(--acf-error);
+}
+
+/* Scrollbar */
+.acf-panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.acf-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.acf-panel-body::-webkit-scrollbar-thumb {
+  background: var(--acf-border);
+  border-radius: 3px;
+}
+
+.acf-panel-body::-webkit-scrollbar-thumb:hover {
+  background: var(--acf-text-muted);
+}
+
+/* Animations */
+@keyframes acf-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.acf-context-item {
+  animation: acf-fadeIn 0.3s ease;
+}
+
+/* Dark mode adjustments for light-themed sites */
+@media (prefers-color-scheme: light) {
+  #acf-context-panel,
+  .acf-notification {
+    background: var(--acf-bg-dark);
+  }
+}
