@@ -201,9 +201,10 @@ export const getActiveContextFromExtension = async () => {
   }
 };
 
-// Check if running in Chrome
+// Check if running in Chrome (or Chromium-based browser)
 export const isChrome = () => {
-  return typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage;
+  // Simply check if chrome.runtime exists - this is what we need for extension communication
+  return typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined';
 };
 
 // Get stored extension ID

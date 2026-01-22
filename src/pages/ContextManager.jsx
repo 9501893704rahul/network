@@ -45,15 +45,22 @@ const ContextManager = () => {
   // Check extension connection on mount
   useEffect(() => {
     const storedId = getStoredExtensionId()
+    const storedVersion = localStorage.getItem('ai_context_flow_extension_version')
+    
     if (storedId) {
       setExtensionIdInput(storedId)
+      // Try to reconnect
       connectToExtension(storedId)
     }
     
     // Load contexts from localStorage as fallback
     const savedContexts = localStorage.getItem('ai_context_flow_contexts')
     if (savedContexts) {
-      setContexts(JSON.parse(savedContexts))
+      try {
+        setContexts(JSON.parse(savedContexts))
+      } catch (e) {
+        console.error('Failed to parse saved contexts:', e)
+      }
     }
   }, [])
 
@@ -65,25 +72,39 @@ const ContextManager = () => {
   const connectToExtension = async (id) => {
     if (!isChrome()) {
       setError('Please use Chrome browser to connect to the extension')
+      setSyncStatus(null)
+      return
+    }
+    
+    if (!id || id.trim() === '') {
+      setError('Please enter an extension ID')
+      setSyncStatus(null)
       return
     }
     
     setError(null)
     setSyncStatus('Connecting...')
     
+    console.log('Attempting to connect to extension:', id)
+    
     try {
-      const result = await checkExtensionInstalled(id)
+      const result = await checkExtensionInstalled(id.trim())
+      console.log('Connection result:', result)
+      
       if (result.installed) {
         setExtensionConnected(true)
         setExtensionVersion(result.version)
         setShowConnectModal(false)
         setSyncStatus('Connected!')
         
+        // Save version to localStorage
+        localStorage.setItem('ai_context_flow_extension_version', result.version)
+        
         // Fetch contexts from extension
         try {
           const extContexts = await getContextsFromExtension()
+          console.log('Fetched contexts from extension:', extContexts)
           if (extContexts && extContexts.length > 0) {
-            // Merge with local contexts
             mergeContexts(extContexts)
           }
         } catch (e) {
@@ -92,11 +113,15 @@ const ContextManager = () => {
         
         setTimeout(() => setSyncStatus(null), 2000)
       } else {
+        console.error('Connection failed:', result.error)
+        setExtensionConnected(false)
         setError(result.error || 'Could not connect to extension')
         setSyncStatus(null)
       }
     } catch (err) {
-      setError(err.message)
+      console.error('Connection error:', err)
+      setExtensionConnected(false)
+      setError(err.message || 'Connection failed')
       setSyncStatus(null)
     }
   }

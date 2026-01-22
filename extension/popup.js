@@ -17,6 +17,21 @@ class AIContextFlow {
     this.renderContexts();
     this.renderHistory();
     this.updateContextSelect();
+    
+    // Listen for storage changes (when contexts are synced from web app)
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if (namespace === 'local' && changes.contexts) {
+        console.log('Contexts updated from external source');
+        this.contexts = changes.contexts.newValue || [];
+        this.renderContexts();
+        this.updateContextSelect();
+      }
+      if (namespace === 'local' && changes.activeContextId) {
+        this.activeContextId = changes.activeContextId.newValue;
+        this.renderContexts();
+        this.updateContextSelect();
+      }
+    });
   }
 
   // Data Management
